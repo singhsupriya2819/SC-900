@@ -1,44 +1,42 @@
-[12:20] Bony Cherian
-    
-{​​​​​​​
+{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {​​​​​​​
-    "adminUsername": {​​​​​​​
+  "parameters": {
+    "adminUsername": {
       "type": "string"
-    }​​​​​​​,
-    "adminPassword": {​​​​​​​
+    },
+    "adminPassword": {
       "type": "securestring"
-    }​​​​​​​,
-    "AzureUserName": {​​​​​​​
+    },
+    "AzureUserName": {
       "type": "string"
-    }​​​​​​​,
-    "AzurePassword": {​​​​​​​
+    },
+    "AzurePassword": {
       "type": "securestring"
-    }​​​​​​​,
-    "ODLID": {​​​​​​​
+    },
+    "ODLID": {
       "type": "string"
-    }​​​​​​​,
-    "DeploymentID": {​​​​​​​
+    },
+    "DeploymentID": {
       "type": "string"
-    }​​​​​​​,
-    "InstallCloudLabsShadow": {​​​​​​​
+    },
+    "InstallCloudLabsShadow": {
       "type": "string",
       "defaultValue": "no",
       "allowedValues": [
         "yes",
         "no"
       ]
-    }​​​​​​​,
-      "customTags": {​​​​​​​
+    },
+      "customTags": {
         "type": "object",
-        "defaultValue": {​​​​​​​
+        "defaultValue": {
           "Environment Name": "SC-900 Module 4",
           "DeploymentID": "[parameters('DeploymentID')]"
-        }​​​​​​​
-      }​​​​​​​
-    }​​​​​​​,
-  "variables": {​​​​​​​
+        }
+      }
+    },
+  "variables": {
     "cloudlabsCommon": "[concat(' -AzureUserName ', parameters('AzureUserName'), ' -AzurePassword ', parameters('AzurePassword'), ' -AzureTenantID ', variables('AzureTenantID'), ' -AzureSubscriptionID ', variables('AzureSubscriptionID'), ' -ODLID ', parameters('ODLID'),' -InstallCloudLabsShadow ', parameters('InstallCloudLabsShadow'))]",
     "AzureSubscriptionID": "[subscription().subscriptionId]",
     "AzureTenantID": "[subscription().tenantId]",
@@ -52,30 +50,30 @@
     "virtualNetworkName": "vnet",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/','subnet')]"
-  }​​​​​​​,
+  },
   "resources": [
-    {​​​​​​​
+    {
       "apiVersion": "2016-09-01",
       "name": "pid-e843308b-3ce2-42a2-b743-2f21b36a5e68",
       "type": "Microsoft.Resources/deployments",
-      "properties": {​​​​​​​
+      "properties": {
         "mode": "Incremental",
-        "template": {​​​​​​​
+        "template": {
           "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
           "resources": []
-        }​​​​​​​
-      }​​​​​​​
-    }​​​​​​​,
-    {​​​​​​​
+        }
+      }
+    },
+    {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2018-05-01",
       "location": "West US",
       "name": "[variables('rgName')]",
       "tags": "[parameters('customTags')]",
-      "properties": {​​​​​​​}​​​​​​​
-    }​​​​​​​,
-    {​​​​​​​
+      "properties": {}
+    },
+    {
       "name": "[variables('winvirtualMachineName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2020-12-01",
@@ -83,40 +81,40 @@
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]"
       ],
-      "properties": {​​​​​​​
-        "hardwareProfile": {​​​​​​​
+      "properties": {
+        "hardwareProfile": {
           "vmSize": "Standard_B2s"
-        }​​​​​​​,
-        "storageProfile": {​​​​​​​
-          "osDisk": {​​​​​​​
+        },
+        "storageProfile": {
+          "osDisk": {
             "createOption": "fromImage",
-            "managedDisk": {​​​​​​​
+            "managedDisk": {
               "storageAccountType": "Standard_LRS"
-            }​​​​​​​
-          }​​​​​​​,
-          "imageReference": {​​​​​​​
+            }
+          },
+          "imageReference": {
             "id": "/subscriptions/e2ee6274-c6e3-4df1-b3d2-79107c10f7b0/resourceGroups/cloudlab-mgmt/providers/Microsoft.Compute/galleries/mocImageGallery/images/az-104-120-303-304-500-definition/versions/Latest"
 
 
-          }​​​​​​​
-        }​​​​​​​,
-        "networkProfile": {​​​​​​​
+          }
+        },
+        "networkProfile": {
           "networkInterfaces": [
-            {​​​​​​​
+            {
               "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
-            }​​​​​​​
+            }
           ]
-        }​​​​​​​,
-        "securityProfile": {​​​​​​​}​​​​​​​,
+        },
+        "securityProfile": {},
         "licenseType": "Windows_Server",
-        "diagnosticsProfile": {​​​​​​​
-          "bootDiagnostics": {​​​​​​​
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
             "enabled": true
-          }​​​​​​​
-        }​​​​​​​
-      }​​​​​​​,
+          }
+        }
+      },
       "resources": [
-        {​​​​​​​
+        {
           "type": "extensions",
           "name": "vmExtension",
           "apiVersion": "2015-06-15",
@@ -124,43 +122,43 @@
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', variables('winvirtualMachineName'))]"
           ],
-          "properties": {​​​​​​​
+          "properties": {
             "publisher": "Microsoft.Compute",
             "type": "CustomScriptExtension",
             "typeHandlerVersion": "1.8",
             "autoUpgradeMinorVersion": "true",
-            "settings": {​​​​​​​
+            "settings": {
               "fileUris": [
                 "https://experienceazure.blob.core.windows.net/templates/moc/sc-900/scripts/psscripts.ps1"
               ],
               "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File moc/sc-900/scripts/psscripts.ps1')]"
-            }​​​​​​​
-          }​​​​​​​
-        }​​​​​​​
+            }
+          }
+        }
       ]
-    }​​​​​​​,
-    {​​​​​​​
+    },
+    {
       "name": "[variables('virtualNetworkName')]",
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2018-02-01",
       "location": "[resourceGroup().location]",
-      "properties": {​​​​​​​
-        "addressSpace": {​​​​​​​
+      "properties": {
+        "addressSpace": {
           "addressPrefixes": [
             "10.0.0.0/16"
           ]
-        }​​​​​​​,
+        },
         "subnets": [
-          {​​​​​​​
+          {
             "name": "subnet",
-            "properties": {​​​​​​​
+            "properties": {
               "addressPrefix": "10.0.0.0/24"
-            }​​​​​​​
-          }​​​​​​​
+            }
+          }
         ]
-      }​​​​​​​
-    }​​​​​​​,
-    {​​​​​​​
+      }
+    },
+    {
       "name": "[variables('networkInterfaceName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2016-09-01",
@@ -170,52 +168,52 @@
         "[concat('Microsoft.Network/publicIpAddresses/', variables('publicIpAddressName'))]",
         "[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
       ],
-      "properties": {​​​​​​​
+      "properties": {
         "ipConfigurations": [
-          {​​​​​​​
+          {
             "name": "ipconfig1",
-            "properties": {​​​​​​​
-              "subnet": {​​​​​​​
+            "properties": {
+              "subnet": {
                 "id": "[variables('subnetRef')]"
-              }​​​​​​​,
+              },
               "privateIPAllocationMethod": "Dynamic",
-              "publicIpAddress": {​​​​​​​
+              "publicIpAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
-              }​​​​​​​
-            }​​​​​​​
-          }​​​​​​​
+              }
+            }
+          }
         ],
-        "networkSecurityGroup": {​​​​​​​
+        "networkSecurityGroup": {
           "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-        }​​​​​​​
-      }​​​​​​​
-    }​​​​​​​,
-    {​​​​​​​
+        }
+      }
+    },
+    {
       "apiVersion": "2017-04-01",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('publicIpAddressName')]",
       "comments": "Public IP",
       "location": "[resourceGroup().location]",
-      "tags": {​​​​​​​
+      "tags": {
         "displayName": "Public IP"
-      }​​​​​​​,
-      "properties": {​​​​​​​
+      },
+      "properties": {
         "publicIPAllocationMethod": "Dynamic",
-        "dnsSettings": {​​​​​​​
+        "dnsSettings": {
           "domainNameLabel": "[variables('publicIPAddressName')]"
-        }​​​​​​​
-      }​​​​​​​
-    }​​​​​​​,
-    {​​​​​​​
+        }
+      }
+    },
+    {
       "name": "[variables('networkSecurityGroupName')]",
       "type": "Microsoft.Network/networkSecurityGroups",
       "apiVersion": "2017-06-01",
       "location": "[resourceGroup().location]",
-      "properties": {​​​​​​​
+      "properties": {
         "securityRules": [
-          {​​​​​​​
+          {
             "name": "default-allow-rdp",
-            "properties": {​​​​​​​
+            "properties": {
               "priority": 1000,
               "protocol": "TCP",
               "access": "Allow",
@@ -224,11 +222,11 @@
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "3389"
-            }​​​​​​​
-          }​​​​​​​,
-          {​​​​​​​
+            }
+          },
+          {
             "name": "default-allow-ssh",
-            "properties": {​​​​​​​
+            "properties": {
               "priority": 1001,
               "protocol": "TCP",
               "access": "Allow",
@@ -237,31 +235,31 @@
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
               "destinationPortRange": "22"
-            }​​​​​​​
-          }​​​​​​​
+            }
+          }
         ]
-      }​​​​​​​
-    }​​​​​​​
+      }
+    }
   ],
-  "outputs": {​​​​​​​
-    "DeploymentID": {​​​​​​​
+  "outputs": {
+    "DeploymentID": {
       "type": "string",
       "value": "[parameters('DeploymentID')]"
-    }​​​​​​​,
-    "VM Admin Username": {​​​​​​​
+    },
+    "VM Admin Username": {
       "type": "string",
       "value": "[parameters('adminUsername')]"
-    }​​​​​​​,
-    "VM Admin Password": {​​​​​​​
+    },
+    "VM Admin Password": {
       "type": "string",
       "value": "[parameters('adminPassword')]"
-    }​​​​​​​,
-    "Windows VM DNS Name": {​​​​​​​
+    },
+    "Windows VM DNS Name": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('publicIpAddressName'))).dnsSettings.fqdn]"
-    }​​​​​​​
-  }​​​​​​​
-}​​​​​​​
+    }
+  }
+}
 
 
 
